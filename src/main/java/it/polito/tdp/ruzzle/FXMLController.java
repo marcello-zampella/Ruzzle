@@ -1,6 +1,7 @@
 package it.polito.tdp.ruzzle;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -90,17 +91,32 @@ public class FXMLController {
 
     @FXML
     void handleProva(ActionEvent event) {
+    	for(Button b:letters.values()) {
+    		b.setStyle("");
+    	}
+    	String s=this.txtParola.getText();
+    	ArrayList<Button> inserite=this.model.provaParola(s);
+    	if(inserite==null) {
+    		this.txtResult.appendText("LA PAROLA CHE HAI INSERITO NON VA BENE");
+    		return;
+    	}
+    	for(Button b:inserite) {
+    		System.out.println(b.getStyle());
+    		b.setStyle("-fx-background-color: #ff0000; ");
+    	}
+    	
 
     }
 
     @FXML
     void handleReset(ActionEvent event) {
-    	model.reset();
+    	model.reset(letters);
+    	
     }
     
     @FXML
     void handleRisolvi(ActionEvent event) {
-
+    	model.risolviTutto(letters);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -158,6 +174,8 @@ public class FXMLController {
     	}
     	
     	this.txtStatus.textProperty().bind(m.statusTextProperty());
+    	model.reset(letters);
+    	
     	
     }
 }
